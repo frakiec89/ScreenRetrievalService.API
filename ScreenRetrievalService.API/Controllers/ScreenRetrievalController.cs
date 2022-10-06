@@ -7,20 +7,38 @@ namespace ScreenRetrievalService.API.Controllers
     [ApiController]
     public class ScreenRetrievalController : ControllerBase
     {
-        public static byte[] DataImage { get; set; }
+        public static List<ImagePost> ImagePosts { get; set; } = new List<ImagePost>();
 
         [HttpPost("PictureReception")] 
         public void PictureReception( ImagePost  bytes)
         {
-            if(bytes != null)   
-                DataImage = bytes.Bytes;
+
+            if(ImagePosts.Any(x=>x.key == bytes.key) == false)
+            {
+                ImagePosts.Add(bytes);
+                return; 
+            }
+
+            if( ImagePosts.Any(x=>x.key == bytes.key))
+            {
+                var image = ImagePosts.Single(x => x.key == bytes.key); 
+                image.timeShet = bytes.timeShet;
+                image.bytes = bytes.bytes; 
+            }
         }
 
         [HttpGet ("GetPicture")]
-        public  ImagePost GetBytes ()
+        public  ImagePost GetBytes (string key )
         {
-            if (DataImage != null)
-                return new ImagePost() { Bytes = DataImage };
+            if (ImagePosts == null)
+                return new ImagePost();
+
+            if(ImagePosts.Count == 0)
+                return new ImagePost();
+
+
+            if (ImagePosts.Any(x=>x.key == key))
+                return  ImagePosts.Single(x=>x.key == key) ;
             else
                 return new ImagePost(); 
         }
@@ -28,6 +46,8 @@ namespace ScreenRetrievalService.API.Controllers
 
     public class ImagePost
     {
-        public byte[] Bytes { get; set; }
+        public byte[] bytes { get; set; }
+        public string key { get; set; }
+        public DateTime timeShet { get; set; }
     }
 }
