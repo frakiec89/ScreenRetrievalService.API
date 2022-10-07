@@ -1,7 +1,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
- builder.WebHost.UseUrls(new string[] { "http://192.168.10.160:81" });
+  builder.WebHost.UseUrls(new string[] { "http://192.168.10.160:81" });
 // Add services to the container.
 builder.Services.AddControllers();
 

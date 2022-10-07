@@ -42,6 +42,20 @@ namespace ScreenRetrievalService.API.Controllers
             else
                 return new ImagePost(); 
         }
+
+        [HttpGet("StopStream")]
+        public void StopStram (string key)
+        {
+            ImagePosts.RemoveAll(x => x.key == key);
+        }
+
+        [HttpGet("IsChekedKey")]
+        public bool IsChekedKey(string key)
+        {
+            var r = ImagePosts.Any(x => x.key == key);
+            return r; 
+        }
+
     }
 
     public class ImagePost
